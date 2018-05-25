@@ -1,0 +1,5 @@
+*.pyc
+settings.json
+*.ppm
+__pycache__/
+.DS_Store
