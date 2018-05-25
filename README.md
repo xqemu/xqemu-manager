@@ -12,14 +12,19 @@ startup.
 
 Why not integrate into XQEMU directly? The approach used here is less invasive
 and works "well enough" for this purpose. XQEMU can also be controlled directly
-at runtime through the QMP interface (but that's not used here yet), so
-additional features (eject dvd for instance) can be added to this.
+at runtime through the QMP interface, so additional features (eject dvd for
+instance) can be added to this.
 
 ## Screenshots
 
-![Main](main.png)
-![Settings](settings.png)
+![Main](screenshots/main.png)
+![Settings](screenshots/settings.png)
 
 ## How to use it
 
-Depends on PyQt5, available with pip.
+Depends on PyQt5, available with pip. Then run like:
+
+```
+pip install PyQt5
+python main.py
+```
