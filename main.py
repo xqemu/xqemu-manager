@@ -165,6 +165,9 @@ class Xqemu(object):
 	def cont(self):
 		return self.run_cmd('cont')
 
+	def restart(self):
+		return self.run_cmd('system_reset')
+
 	def screenshot(self):
 		cmd = {
 		    "execute": "screendump", 
@@ -197,6 +200,7 @@ class MainWindow(QMainWindow, mainwindow_class):
 		self.runButton.clicked.connect(self.onRunButtonClicked)
 		self.pauseButton.clicked.connect(self.onPauseButtonClicked)
 		self.screenshotButton.clicked.connect(self.onScreenshotButtonClicked)
+		self.restartButton.clicked.connect(self.onRestartButtonClicked)
 		self.actionExit.triggered.connect(self.onExitClicked)
 		self.actionSettings.triggered.connect(self.onSettingsClicked)
 
@@ -228,6 +232,10 @@ class MainWindow(QMainWindow, mainwindow_class):
 	def onScreenshotButtonClicked(self):
 		if not self.inst.isRunning: return
 		self.inst.screenshot()
+
+	def onRestartButtonClicked(self):
+		if not self.inst.isRunning: return
+		self.inst.restart()
 
 	def onSettingsClicked(self):
 		s = SettingsWindow(self.settings)
