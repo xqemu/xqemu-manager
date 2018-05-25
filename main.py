@@ -5,10 +5,12 @@
 from PyQt5.QtWidgets import QApplication, QDialog, QFileDialog, QMainWindow, QMessageBox
 from PyQt5.uic import loadUiType
 from PyQt5 import QtCore, QtGui
+from qmp import QEMUMonitorProtocol
 import sys
 import os, os.path
 import json
 import subprocess
+import time
 
 SETTINGS_FILE = './settings.json'
 
@@ -93,6 +95,7 @@ class SettingsWindow(QDialog, settings_class):
 class Xqemu(object):
 	def __init__(self):
 		self._p = None
+		self._qmp = None
 
 	def start(self, settings):
 		def check_path(path):
@@ -120,16 +123,60 @@ class Xqemu(object):
 			-machine xbox,bootrom=%(mcpx_path)s%(short_anim_arg)s -m 64 \
 			-bios %(flash_path)s \
 			-net nic,model=nvnet -net user \
-			-monitor stdio \
 			-drive file=%(hdd_path)s,index=0,media=disk \
-			-drive index=1,media=cdrom%(dvd_path_arg)s' % locals()
+			-drive index=1,media=cdrom%(dvd_path_arg)s \
+			-qmp tcp:localhost:4444,server,nowait' % locals()
 
 		self._p = subprocess.Popen(cmd.split())
+		i = 0
+		while True:
+			print('Trying to connect %d' % i)
+			if i > 0: time.sleep(1)
+			try:
+				self._qmp = QEMUMonitorProtocol(('localhost', 4444))
+				self._qmp.connect()
+			except Exception as e:
+				if i > 4:
+					raise
+				else:
+					i += 1
+					continue
+			break
 
 	def stop(self):
 		if self._p:
 			self._p.terminate()
 			self._p = None
+
+	def run_cmd(self, cmd):
+		if type(cmd) is str:
+			cmd = {
+			    "execute": cmd, 
+			    "arguments": {}
+			}
+		resp = self._qmp.cmd_obj(cmd)
+		if resp is None:
+			raise Exception('Disconnected!')
+		return resp
+
+	def pause(self):
+		return self.run_cmd('stop')
+
+	def cont(self):
+		return self.run_cmd('cont')
+
+	def screenshot(self):
+		cmd = {
+		    "execute": "screendump", 
+		    "arguments": {
+		        "filename": "screenshot.ppm"
+		    }
+		}
+		return self.run_cmd(cmd)
+
+	def isPaused(self):
+		resp = self.run_cmd('query-status')
+		return resp['return']['status'] == 'paused'
 
 	@property
 	def isRunning(self):
@@ -143,9 +190,13 @@ class MainWindow(QMainWindow, mainwindow_class):
 		self.settings = SettingsManager()
 		self.settings.load()
 		self.runButton.setText('Start')
+		self.pauseButton.setText('Pause')
+		self.screenshotButton.setText('Screenshot')
 
 		# Connect signals
 		self.runButton.clicked.connect(self.onRunButtonClicked)
+		self.pauseButton.clicked.connect(self.onPauseButtonClicked)
+		self.screenshotButton.clicked.connect(self.onScreenshotButtonClicked)
 		self.actionExit.triggered.connect(self.onExitClicked)
 		self.actionSettings.triggered.connect(self.onSettingsClicked)
 
@@ -161,6 +212,22 @@ class MainWindow(QMainWindow, mainwindow_class):
 			# Instance exists
 			self.inst.stop()
 			self.runButton.setText('Start')
+
+	def onPauseButtonClicked(self):
+		if not self.inst.isRunning: return
+
+		# We should probably actually pull from event queue to reflect state
+		# here instead of querying during the button press
+		if self.inst.isPaused():
+			self.inst.cont()
+			self.pauseButton.setText('Pause')
+		else:
+			self.inst.pause()
+			self.pauseButton.setText('Continue')
+
+	def onScreenshotButtonClicked(self):
+		if not self.inst.isRunning: return
+		self.inst.screenshot()
 
 	def onSettingsClicked(self):
 		s = SettingsWindow(self.settings)
