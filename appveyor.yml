@@ -1,0 +1,37 @@
+# https://github.com/ogrisel/python-appveyor-demo/blob/master/appveyor.yml
+environment:
+  matrix:
+    - PYTHON: "C:\\Python36-x64"
+      PYTHON_VERSION: "3.6.x" # currently 3.6.5
+      PYTHON_ARCH: "64"
+
+install:
+  # Prepend newly installed Python to the PATH of this build (this cannot be
+  # done from inside the powershell script as it would require to restart
+  # the parent CMD process).
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
+
+  # Check that we have the expected version and architecture for Python
+  - "python --version"
+  - "python -c \"import struct; print(struct.calcsize('P') * 8)\""
+
+  # Upgrade to the latest version of pip to avoid it displaying warnings
+  # about it being out of date.
+  - "python -m pip install --upgrade pip"
+
+  # Install the build dependencies of the project. If some dependencies contain
+  # compiled extensions and are not provided as pre-built wheel packages,
+  # pip will build them from source using the MSVC compiler matching the
+  # target Python version and architecture
+  - "pip install PyQt5 PyInstaller" # FIXME: Make this a requirements.txt file
+
+build_script:
+  - "pyinstaller.exe --onefile --windowed --name xqemu-manager main.py" # FIXME: Probably should use spec file
+  - "xcopy *.ui dist"
+
+deploy: off
+
+artifacts:
+  - path: dist
+    name: xqemu-manager
+    type: zip

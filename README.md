@@ -1,5 +1,9 @@
 # xqemu Manager Prototype
 
+| Windows Build Status |
+| -------------------- |
+| [![Build status](https://ci.appveyor.com/api/projects/status/q91apisx6eww0f0v?svg=true)](https://ci.appveyor.com/project/mborgerson/xqemu-manager) |
+
 This is a helper GUI prototype (hastily hacked together) to launch and control
 [XQEMU](http://github.com/xqemu/xqemu), currently in very early stages. Pull
 requests welcome.
@@ -14,11 +18,6 @@ Why not integrate into XQEMU directly? The approach used here is less invasive
 and works "well enough" for this purpose. XQEMU can also be controlled directly
 at runtime through the QMP interface, so additional features (eject dvd for
 instance) can be added to this.
-
-## Screenshots
-
-![Main](screenshots/main.png)
-![Settings](screenshots/settings.png)
 
 ## How to use it
 
