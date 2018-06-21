@@ -111,6 +111,7 @@ class Xqemu(object):
 		hdd_path = settings.settings['hdd_path']
 		check_path(hdd_path)
 		short_anim_arg = ',short_animation' if settings.settings['short_anim'] else ''
+		hdd_lock_arg = ',locked' if settings.settings['hdd_locked'] else ''
 
 		dvd_path_arg = ''
 		if settings.settings['dvd_present']:
@@ -123,7 +124,7 @@ class Xqemu(object):
 			-machine xbox,bootrom=%(mcpx_path)s%(short_anim_arg)s -m 64 \
 			-bios %(flash_path)s \
 			-net nic,model=nvnet -net user \
-			-drive file=%(hdd_path)s,index=0,media=disk \
+			-drive file=%(hdd_path)s,index=0,media=disk%(hdd_lock_arg)s \
 			-drive index=1,media=cdrom%(dvd_path_arg)s \
 			-qmp tcp:localhost:4444,server,nowait' % locals()
 
