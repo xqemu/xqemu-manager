@@ -119,16 +119,27 @@ class Xqemu(object):
 			dvd_path_arg = ',file=' + settings.settings['dvd_path']
 
 		# Build qemu lunch cmd
-		cmd = '%(xqemu_path)s \
-			-cpu pentium3 \
-			-machine xbox,bootrom=%(mcpx_path)s%(short_anim_arg)s -m 64 \
-			-bios %(flash_path)s \
-			-net nic,model=nvnet -net user \
-			-drive file=%(hdd_path)s,index=0,media=disk%(hdd_lock_arg)s \
-			-drive index=1,media=cdrom%(dvd_path_arg)s \
-			-qmp tcp:localhost:4444,server,nowait' % locals()
+		cmd = [xqemu_path,
+		       '-cpu','pentium3',
+		       '-machine','xbox,bootrom=%(mcpx_path)s%(short_anim_arg)s' % locals(),
+		       '-m','64',
+		       '-bios', '%(flash_path)s' % locals(),
+		       '-net','nic,model=nvnet',
+		       '-net','user',
+		       '-drive','file=%(hdd_path)s,index=0,media=disk%(hdd_lock_arg)s' % locals(),
+		       '-drive','index=1,media=cdrom%(dvd_path_arg)s' % locals(),
+		       '-qmp','tcp:localhost:4444,server,nowait']
 
-		self._p = subprocess.Popen(cmd.split())
+		# Attempt to interpret the constructed command line
+		cmd_escaped = []
+		for cmd_part in cmd:
+			if ' ' in cmd_part:
+				cmd_escaped += ['"%s"' % cmd_part.replace('"', '\\"')]
+			else:
+				cmd_escaped += [cmd_part]
+		print('Running: %s' % ' '.join(cmd_escaped))
+
+		self._p = subprocess.Popen(cmd)
 		i = 0
 		while True:
 			print('Trying to connect %d' % i)
