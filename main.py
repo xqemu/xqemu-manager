@@ -128,7 +128,8 @@ class Xqemu(object):
 		       '-net','user',
 		       '-drive','file=%(hdd_path)s,index=0,media=disk%(hdd_lock_arg)s' % locals(),
 		       '-drive','index=1,media=cdrom%(dvd_path_arg)s' % locals(),
-		       '-qmp','tcp:localhost:4444,server,nowait']
+		       '-qmp','tcp:localhost:4444,server,nowait',
+		       '-display','sdl']
 
 		# Attempt to interpret the constructed command line
 		cmd_escaped = []
