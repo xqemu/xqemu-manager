@@ -251,7 +251,7 @@
              </widget>
             </item>
             <item>
-             <widget class="QComboBox" name="comboBox">
+             <widget class="QComboBox" name="systemMemory">
               <item>
                <property name="text">
                 <string>64 MiB</string>

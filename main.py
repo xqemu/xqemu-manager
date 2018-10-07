@@ -32,6 +32,7 @@ class SettingsManager(object):
 			'dvd_present': True,
 			'dvd_path': '/path/to/disc.iso',
 			'short_anim': False,
+			'sys_memory': '64 MiB',
 		}
 
 	def save(self):
@@ -57,6 +58,8 @@ class SettingsWindow(QDialog, settings_class):
 		def getTextAttr(widget, var): widget.setText(self.settings.settings[var])
 		def setCheckAttr(widget, var): self.settings.settings[var] = widget.isChecked()
 		def getCheckAttr(widget, var): widget.setChecked(self.settings.settings[var])
+		def setDropdownAttr(widget, var): self.settings.settings[var] = widget.currentText()
+		def getDropdownAttr(widget, var): widget.setCurrentText(self.settings.settings[var])
 
 		def bindTextWidget(widget, var):
 			getTextAttr(widget, var)
@@ -68,6 +71,10 @@ class SettingsWindow(QDialog, settings_class):
 
 		def bindFilePicker(button, text):
 			button.clicked.connect(lambda:self.setSaveFileName(text))
+
+		def bindDropdownWidget(widget, var):
+			getDropdownAttr(widget, var)
+			widget.currentIndexChanged.connect(lambda:setDropdownAttr(widget, var))
 
 		bindTextWidget(self.xqemuPath, 'xqemu_path')
 		bindFilePicker(self.setXqemuPath, self.xqemuPath)
@@ -82,6 +89,7 @@ class SettingsWindow(QDialog, settings_class):
 		bindTextWidget(self.hddPath, 'hdd_path')
 		bindFilePicker(self.setHddPath, self.hddPath)
 		bindCheckWidget(self.hddLocked, 'hdd_locked')
+		bindDropdownWidget(self.systemMemory, 'sys_memory')
 
 	def setSaveFileName(self, obj):
 		options = QFileDialog.Options()
@@ -112,6 +120,7 @@ class Xqemu(object):
 		check_path(hdd_path)
 		short_anim_arg = ',short_animation' if settings.settings['short_anim'] else ''
 		hdd_lock_arg = ',locked' if settings.settings['hdd_locked'] else ''
+		sys_memory = settings.settings['sys_memory'].split(' ')[0]+'M'
 
 		dvd_path_arg = ''
 		if settings.settings['dvd_present']:
@@ -122,7 +131,7 @@ class Xqemu(object):
 		cmd = [xqemu_path,
 		       '-cpu','pentium3',
 		       '-machine','xbox,bootrom=%(mcpx_path)s%(short_anim_arg)s' % locals(),
-		       '-m','64',
+		       '-m', '%(sys_memory)s' % locals(),
 		       '-bios', '%(flash_path)s' % locals(),
 		       '-net','nic,model=nvnet',
 		       '-net','user',
