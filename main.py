@@ -132,14 +132,20 @@ class Xqemu(object):
 				if not os.path.exists(path) or os.path.isdir(path):
 					raise Exception('File %s could not be found!' % path)
 
+		def escape_path(path):
+			return path.replace(',', ',,')
+
 		xqemu_path = settings.settings['xqemu_path']
 		check_path(xqemu_path)
 		mcpx_path = settings.settings['mcpx_path']
 		check_path(mcpx_path)
+		mcpx_path_arg = escape_path(mcpx_path)
 		flash_path = settings.settings['flash_path']
 		check_path(flash_path)
+		flash_path_arg = escape_path(flash_path)
 		hdd_path = settings.settings['hdd_path']
 		check_path(hdd_path)
+		hdd_path_arg = escape_path(hdd_path)
 		short_anim_arg = ',short_animation' if settings.settings['short_anim'] else ''
 		hdd_lock_arg = ',locked' if settings.settings['hdd_locked'] else ''
 		sys_memory = settings.settings['sys_memory'].split(' ')[0]+'M'
@@ -148,19 +154,19 @@ class Xqemu(object):
 		dvd_path_arg = ''
 		if settings.settings['dvd_present']:
 			check_path(settings.settings['dvd_path'])
-			dvd_path_arg = ',file=' + settings.settings['dvd_path']
+			dvd_path_arg = ',file=' + escape_path(settings.settings['dvd_path'])
 
 		extra_args = [x for x in settings.settings['extra_args'].split(' ') if x is not '']
 
 		# Build qemu launch cmd
 		cmd = [xqemu_path,
 		       '-cpu','pentium3',
-		       '-machine','xbox%(accelerator_arg)s,bootrom=%(mcpx_path)s%(short_anim_arg)s' % locals(),
+		       '-machine','xbox%(accelerator_arg)s,bootrom=%(mcpx_path_arg)s%(short_anim_arg)s' % locals(),
 		       '-m', '%(sys_memory)s' % locals(),
-		       '-bios', '%(flash_path)s' % locals(),
+		       '-bios', '%(flash_path_arg)s' % locals(),
 		       '-net','nic,model=nvnet',
 		       '-net','user',
-		       '-drive','file=%(hdd_path)s,index=0,media=disk%(hdd_lock_arg)s' % locals(),
+		       '-drive','file=%(hdd_path_arg)s,index=0,media=disk%(hdd_lock_arg)s' % locals(),
 		       '-drive','index=1,media=cdrom%(dvd_path_arg)s' % locals(),
 		       '-qmp','tcp:localhost:4444,server,nowait',
 		       '-display','sdl'] + extra_args
