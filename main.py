@@ -33,6 +33,7 @@ class SettingsManager(object):
 			'dvd_path': '/path/to/disc.iso',
 			'short_anim': False,
 			'sys_memory': '64 MiB',
+			'extra_args': '',
 		}
 
 	def save(self):
@@ -90,6 +91,7 @@ class SettingsWindow(QDialog, settings_class):
 		bindFilePicker(self.setHddPath, self.hddPath)
 		bindCheckWidget(self.hddLocked, 'hdd_locked')
 		bindDropdownWidget(self.systemMemory, 'sys_memory')
+		bindTextWidget(self.additionalArgs, 'extra_args')
 
 	def setSaveFileName(self, obj):
 		options = QFileDialog.Options()
@@ -127,6 +129,8 @@ class Xqemu(object):
 			check_path(settings.settings['dvd_path'])
 			dvd_path_arg = ',file=' + settings.settings['dvd_path']
 
+		extra_args = [x for x in settings.settings['extra_args'].split(' ') if x is not '']
+
 		# Build qemu lunch cmd
 		cmd = [xqemu_path,
 		       '-cpu','pentium3',
@@ -138,7 +142,7 @@ class Xqemu(object):
 		       '-drive','file=%(hdd_path)s,index=0,media=disk%(hdd_lock_arg)s' % locals(),
 		       '-drive','index=1,media=cdrom%(dvd_path_arg)s' % locals(),
 		       '-qmp','tcp:localhost:4444,server,nowait',
-		       '-display','sdl']
+		       '-display','sdl'] + extra_args
 
 		# Attempt to interpret the constructed command line
 		cmd_escaped = []
