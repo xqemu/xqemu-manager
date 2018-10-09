@@ -539,6 +539,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QLabel" name="copyrightLabel">
+         <property name="text">
+          <string>Copyright (C) 2018, XQEMU Developers</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item>
         <spacer name="verticalSpacer_4">
          <property name="orientation">
           <enum>Qt::Vertical</enum>
@@ -561,7 +571,8 @@
        <item>
         <widget class="QLabel" name="label_7">
          <property name="text">
-          <string>Disclaimer: This program is provided without warranty blah blah blah blah blah</string>
+          <string>This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
