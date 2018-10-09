@@ -61,14 +61,17 @@ class SettingsWindow(QDialog, settings_class):
 		def getCheckAttr(widget, var): widget.setChecked(self.settings.settings[var])
 		def setDropdownAttr(widget, var): self.settings.settings[var] = widget.currentText()
 		def getDropdownAttr(widget, var): widget.setCurrentText(self.settings.settings[var])
+		def updateLaunchCmd(): self.invocationPreview.setPlainText(Xqemu.launchCmdToString(Xqemu.generateLaunchCmd(self.settings, True)))
 
 		def bindTextWidget(widget, var):
 			getTextAttr(widget, var)
 			widget.textChanged.connect(lambda:setTextAttr(widget, var))
+			widget.textChanged.connect(updateLaunchCmd)
 
 		def bindCheckWidget(widget, var):
 			getCheckAttr(widget, var)
 			widget.stateChanged.connect(lambda:setCheckAttr(widget, var))
+			widget.stateChanged.connect(updateLaunchCmd)
 
 		def bindFilePicker(button, text):
 			button.clicked.connect(lambda:self.setSaveFileName(text))
@@ -76,6 +79,7 @@ class SettingsWindow(QDialog, settings_class):
 		def bindDropdownWidget(widget, var):
 			getDropdownAttr(widget, var)
 			widget.currentIndexChanged.connect(lambda:setDropdownAttr(widget, var))
+			widget.currentIndexChanged.connect(updateLaunchCmd)
 
 		bindTextWidget(self.xqemuPath, 'xqemu_path')
 		bindFilePicker(self.setXqemuPath, self.xqemuPath)
@@ -92,6 +96,7 @@ class SettingsWindow(QDialog, settings_class):
 		bindCheckWidget(self.hddLocked, 'hdd_locked')
 		bindDropdownWidget(self.systemMemory, 'sys_memory')
 		bindTextWidget(self.additionalArgs, 'extra_args')
+		updateLaunchCmd()
 
 	def setSaveFileName(self, obj):
 		options = QFileDialog.Options()
@@ -107,10 +112,12 @@ class Xqemu(object):
 		self._p = None
 		self._qmp = None
 
-	def start(self, settings):
+	@staticmethod
+	def generateLaunchCmd(settings, skipPathChecks=False):
 		def check_path(path):
-			if not os.path.exists(path) or os.path.isdir(path):
-				raise Exception('File %s could not be found!' % path)
+			if not skipPathChecks:
+				if not os.path.exists(path) or os.path.isdir(path):
+					raise Exception('File %s could not be found!' % path)
 
 		xqemu_path = settings.settings['xqemu_path']
 		check_path(xqemu_path)
@@ -131,7 +138,7 @@ class Xqemu(object):
 
 		extra_args = [x for x in settings.settings['extra_args'].split(' ') if x is not '']
 
-		# Build qemu lunch cmd
+		# Build qemu launch cmd
 		cmd = [xqemu_path,
 		       '-cpu','pentium3',
 		       '-machine','xbox,bootrom=%(mcpx_path)s%(short_anim_arg)s' % locals(),
@@ -144,6 +151,10 @@ class Xqemu(object):
 		       '-qmp','tcp:localhost:4444,server,nowait',
 		       '-display','sdl'] + extra_args
 
+		return cmd
+
+	@staticmethod
+	def launchCmdToString(cmd):
 		# Attempt to interpret the constructed command line
 		cmd_escaped = []
 		for cmd_part in cmd:
@@ -151,7 +162,13 @@ class Xqemu(object):
 				cmd_escaped += ['"%s"' % cmd_part.replace('"', '\\"')]
 			else:
 				cmd_escaped += [cmd_part]
-		print('Running: %s' % ' '.join(cmd_escaped))
+
+		return ' '.join(cmd_escaped)
+
+	def start(self, settings):
+		cmd = self.generateLaunchCmd(settings)
+
+		print('Running: %s' % self.launchCmdToString(cmd))
 
 		self._p = subprocess.Popen(cmd)
 		i = 0
