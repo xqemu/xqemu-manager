@@ -38,21 +38,32 @@
          <property name="title">
           <string>XQEMU</string>
          </property>
-         <layout class="QGridLayout" name="gridLayout_3">
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="xqemuPath"/>
+         <layout class="QVBoxLayout" name="verticalLayout_15">
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="label_12">
+              <property name="text">
+               <string>XQEMU Executable:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLineEdit" name="xqemuPath"/>
+            </item>
+            <item>
+             <widget class="QPushButton" name="setXqemuPath">
+              <property name="text">
+               <string>Choose...</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_12">
+          <item>
+           <widget class="QCheckBox" name="useAccelerator">
             <property name="text">
-             <string>XQEMU Executable:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="2">
-           <widget class="QPushButton" name="setXqemuPath">
-            <property name="text">
-             <string>Choose...</string>
+             <string>Use hardware CPU acceleration</string>
             </property>
            </widget>
           </item>

@@ -11,6 +11,7 @@ import os, os.path
 import json
 import subprocess
 import time
+import platform
 
 SETTINGS_FILE = './settings.json'
 
@@ -33,6 +34,7 @@ class SettingsManager(object):
 			'dvd_path': '/path/to/disc.iso',
 			'short_anim': False,
 			'sys_memory': '64 MiB',
+			'use_accelerator': False,
 			'extra_args': '',
 		}
 
@@ -95,6 +97,7 @@ class SettingsWindow(QDialog, settings_class):
 		bindFilePicker(self.setHddPath, self.hddPath)
 		bindCheckWidget(self.hddLocked, 'hdd_locked')
 		bindDropdownWidget(self.systemMemory, 'sys_memory')
+		bindCheckWidget(self.useAccelerator, 'use_accelerator')
 		bindTextWidget(self.additionalArgs, 'extra_args')
 		updateLaunchCmd()
 
@@ -111,6 +114,16 @@ class Xqemu(object):
 	def __init__(self):
 		self._p = None
 		self._qmp = None
+
+	@staticmethod
+	def generateAcceleratorArg(use):
+		if not use:
+			return ''
+
+		# pick accelerator based on OS (default to none if OS is unknown)
+		return {'Darwin': ',-accel=haxm',
+				'Linux': ',accel=kvm,kernel_irqchip=off',
+				'Windows': ',accel=haxm'}.get(platform.system(), '')
 
 	@staticmethod
 	def generateLaunchCmd(settings, skipPathChecks=False):
@@ -130,6 +143,7 @@ class Xqemu(object):
 		short_anim_arg = ',short_animation' if settings.settings['short_anim'] else ''
 		hdd_lock_arg = ',locked' if settings.settings['hdd_locked'] else ''
 		sys_memory = settings.settings['sys_memory'].split(' ')[0]+'M'
+		accelerator_arg = Xqemu.generateAcceleratorArg(settings.settings['use_accelerator'])
 
 		dvd_path_arg = ''
 		if settings.settings['dvd_present']:
@@ -141,7 +155,7 @@ class Xqemu(object):
 		# Build qemu launch cmd
 		cmd = [xqemu_path,
 		       '-cpu','pentium3',
-		       '-machine','xbox,bootrom=%(mcpx_path)s%(short_anim_arg)s' % locals(),
+		       '-machine','xbox%(accelerator_arg)s,bootrom=%(mcpx_path)s%(short_anim_arg)s' % locals(),
 		       '-m', '%(sys_memory)s' % locals(),
 		       '-bios', '%(flash_path)s' % locals(),
 		       '-net','nic,model=nvnet',
