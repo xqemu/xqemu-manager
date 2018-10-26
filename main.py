@@ -35,6 +35,9 @@ class SettingsManager(object):
 			'short_anim': False,
 			'sys_memory': '64 MiB',
 			'use_accelerator': False,
+			'gdb_enabled': False,
+			'gdb_wait': False,
+			'gdb_port': '1234',
 			'extra_args': '',
 		}
 
@@ -98,6 +101,9 @@ class SettingsWindow(QDialog, settings_class):
 		bindCheckWidget(self.hddLocked, 'hdd_locked')
 		bindDropdownWidget(self.systemMemory, 'sys_memory')
 		bindCheckWidget(self.useAccelerator, 'use_accelerator')
+		bindCheckWidget(self.gdbEnabled, 'gdb_enabled')
+		bindCheckWidget(self.waitForGdb, 'gdb_wait')
+		bindTextWidget(self.gdbPort, 'gdb_port')
 		bindTextWidget(self.additionalArgs, 'extra_args')
 		updateLaunchCmd()
 
@@ -169,7 +175,15 @@ class Xqemu(object):
 		       '-drive','file=%(hdd_path_arg)s,index=0,media=disk%(hdd_lock_arg)s' % locals(),
 		       '-drive','index=1,media=cdrom%(dvd_path_arg)s' % locals(),
 		       '-qmp','tcp:localhost:4444,server,nowait',
-		       '-display','sdl'] + extra_args
+		       '-display','sdl']
+
+		if settings.settings['gdb_enabled']:
+			cmd.append('-gdb')
+			cmd.append('tcp::' + settings.settings['gdb_port'])
+			if settings.settings['gdb_wait']:
+				cmd.append('-S')
+
+		cmd += extra_args
 
 		return cmd
 
