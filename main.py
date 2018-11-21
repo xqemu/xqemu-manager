@@ -38,6 +38,10 @@ class SettingsManager(object):
 			'gdb_enabled': False,
 			'gdb_wait': False,
 			'gdb_port': '1234',
+			'controller_one': 'Not connected',
+			'controller_two': 'Not connected',
+			'controller_three': 'Not connected',
+			'controller_four': 'Not connected',
 			'extra_args': '',
 		}
 
@@ -101,6 +105,10 @@ class SettingsWindow(QDialog, settings_class):
 		bindCheckWidget(self.hddLocked, 'hdd_locked')
 		bindDropdownWidget(self.systemMemory, 'sys_memory')
 		bindCheckWidget(self.useAccelerator, 'use_accelerator')
+		bindDropdownWidget(self.controller1, 'controller_one')
+		bindDropdownWidget(self.controller2, 'controller_two')
+		bindDropdownWidget(self.controller3, 'controller_three')
+		bindDropdownWidget(self.controller4, 'controller_four')
 		bindCheckWidget(self.gdbEnabled, 'gdb_enabled')
 		bindCheckWidget(self.waitForGdb, 'gdb_wait')
 		bindTextWidget(self.gdbPort, 'gdb_port')
@@ -130,6 +138,24 @@ class Xqemu(object):
 		return {'Darwin': ',-accel=haxm',
 				'Linux': ',accel=kvm,kernel_irqchip=off',
 				'Windows': ',accel=haxm'}.get(platform.system(), '')
+
+	@staticmethod
+	def generateControllerArg(settings):
+		def genArg(settings, name, port):
+			arg = {'Not connected': '',
+			 'Keyboard': 'usb-xbox-gamepad',
+			 'Gamepad #0': 'usb-xbox-gamepad-sdl,index=0',
+			 'Gamepad #1': 'usb-xbox-gamepad-sdl,index=1',
+			 'Gamepad #2': 'usb-xbox-gamepad-sdl,index=2',
+			 'Gamepad #3': 'usb-xbox-gamepad-sdl,index=3'}.get(settings.settings[name], '')
+			if arg is not '':
+				return ['-device'] + [arg + ',port=' + str(port)]
+			return []
+
+		args = []
+		for controller in zip([3, 4, 1, 2], ['controller_one', 'controller_two', 'controller_three', 'controller_four']):
+			args += genArg(settings, controller[1], controller[0])
+		return args
 
 	@staticmethod
 	def generateLaunchCmd(settings, skipPathChecks=False):
@@ -176,6 +202,8 @@ class Xqemu(object):
 		       '-drive','index=1,media=cdrom%(dvd_path_arg)s' % locals(),
 		       '-qmp','tcp:localhost:4444,server,nowait',
 		       '-display','sdl']
+
+		cmd += Xqemu.generateControllerArg(settings)
 
 		if settings.settings['gdb_enabled']:
 			cmd.append('-gdb')

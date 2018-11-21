@@ -379,6 +379,180 @@
       <attribute name="title">
        <string>Input Devices</string>
       </attribute>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="0" column="1">
+        <widget class="QGroupBox" name="controller2Box">
+         <property name="title">
+          <string>Controller 2</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_17">
+          <item>
+           <widget class="QComboBox" name="controller2">
+            <item>
+             <property name="text">
+              <string>Not connected</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Keyboard</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #3</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="controller3Box">
+         <property name="title">
+          <string>Controller 3</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_18">
+          <item>
+           <widget class="QComboBox" name="controller3">
+            <item>
+             <property name="text">
+              <string>Not connected</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Keyboard</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #3</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QGroupBox" name="controller4Box">
+         <property name="title">
+          <string>Controller 4</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_19">
+          <item>
+           <widget class="QComboBox" name="controller4">
+            <item>
+             <property name="text">
+              <string>Not connected</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Keyboard</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #3</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="controller1Box">
+         <property name="title">
+          <string>Controller 1</string>
+         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_16">
+          <item>
+           <widget class="QComboBox" name="controller1">
+            <item>
+             <property name="text">
+              <string>Not connected</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Keyboard</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #0</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #1</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #2</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Gamepad #3</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
      </widget>
      <widget class="QWidget" name="debugTab">
       <attribute name="title">
