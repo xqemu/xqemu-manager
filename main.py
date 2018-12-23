@@ -149,7 +149,7 @@ class Xqemu(object):
 			 'Gamepad #2': 'usb-xbox-gamepad-sdl,index=2',
 			 'Gamepad #3': 'usb-xbox-gamepad-sdl,index=3'}.get(settings.settings[name], '')
 			if arg is not '':
-				return ['-device'] + [arg + ',port=' + str(port)]
+				return ['-device'] + [arg + ',port=' + str(port) + ".1"]
 			return []
 
 		args = []
@@ -200,6 +200,10 @@ class Xqemu(object):
 		       '-net','user',
 		       '-drive','file=%(hdd_path_arg)s,index=0,media=disk%(hdd_lock_arg)s' % locals(),
 		       '-drive','index=1,media=cdrom%(dvd_path_arg)s' % locals(),
+		       '-usb', '-device', 'usb-hub,port=3',
+		       '-usb', '-device', 'usb-hub,port=4',
+		       '-usb', '-device', 'usb-hub,port=1',
+		       '-usb', '-device', 'usb-hub,port=2',
 		       '-qmp','tcp:localhost:4444,server,nowait',
 		       '-display','sdl']
 
