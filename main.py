@@ -42,6 +42,14 @@ class SettingsManager(object):
 			'controller_two': 'Not connected',
 			'controller_three': 'Not connected',
 			'controller_four': 'Not connected',
+			'xmu_1a_path': '',
+			'xmu_1b_path': '',
+			'xmu_2a_path': '',
+			'xmu_2b_path': '',
+			'xmu_3a_path': '',
+			'xmu_3b_path': '',
+			'xmu_4a_path': '',
+			'xmu_4b_path': '',
 			'extra_args': '',
 		}
 
@@ -109,6 +117,22 @@ class SettingsWindow(QDialog, settings_class):
 		bindDropdownWidget(self.controller2, 'controller_two')
 		bindDropdownWidget(self.controller3, 'controller_three')
 		bindDropdownWidget(self.controller4, 'controller_four')
+		bindFilePicker(self.setXmu1A, self.xmu1APath)
+		bindTextWidget(self.xmu1APath, 'xmu_1a_path')
+		bindFilePicker(self.setXmu1B, self.xmu1BPath)
+		bindTextWidget(self.xmu1BPath, 'xmu_1b_path')
+		bindFilePicker(self.setXmu2A, self.xmu2APath)
+		bindTextWidget(self.xmu2APath, 'xmu_2a_path')
+		bindFilePicker(self.setXmu2B, self.xmu2BPath)
+		bindTextWidget(self.xmu2BPath, 'xmu_2b_path')
+		bindFilePicker(self.setXmu3A, self.xmu3APath)
+		bindTextWidget(self.xmu3APath, 'xmu_3a_path')
+		bindFilePicker(self.setXmu3B, self.xmu3BPath)
+		bindTextWidget(self.xmu3BPath, 'xmu_3b_path')
+		bindFilePicker(self.setXmu4A, self.xmu4APath)
+		bindTextWidget(self.xmu4APath, 'xmu_4a_path')
+		bindFilePicker(self.setXmu4B, self.xmu4BPath)
+		bindTextWidget(self.xmu4BPath, 'xmu_4b_path')
 		bindCheckWidget(self.gdbEnabled, 'gdb_enabled')
 		bindCheckWidget(self.waitForGdb, 'gdb_wait')
 		bindTextWidget(self.gdbPort, 'gdb_port')
@@ -155,6 +179,29 @@ class Xqemu(object):
 		args = []
 		for controller in zip([3, 4, 1, 2], ['controller_one', 'controller_two', 'controller_three', 'controller_four']):
 			args += genArg(settings, controller[1], controller[0])
+		return args
+
+	@staticmethod
+	def generateXmuArg(settings, skipPathChecks):
+		def check_path(path):
+			if not skipPathChecks:
+				if not os.path.exists(path) or os.path.isdir(path):
+					raise Exception('File %s could not be found!' % path)
+
+		def escape_path(path):
+			return path.replace(',', ',,')
+
+		def genArg(settings, name, port):
+			if settings.settings[name] is not '':
+				check_path(settings.settings[name])
+				return ['-drive', 'if=none,id=' + name + ',file=' + escape_path(settings.settings[name]),
+				        '-device', 'usb-storage,drive=' + name + ',port=' + port]
+			return []
+
+		args = []
+		for xmu in zip([1, 2, 3, 4], [3, 4, 1, 2]):
+			args += genArg(settings, 'xmu_' + str(xmu[0]) + 'a_path', str(xmu[1]) + '.2')
+			args += genArg(settings, 'xmu_' + str(xmu[0]) + 'b_path', str(xmu[1]) + '.3')
 		return args
 
 	@staticmethod
@@ -208,6 +255,7 @@ class Xqemu(object):
 		       '-display','sdl']
 
 		cmd += Xqemu.generateControllerArg(settings)
+		cmd += Xqemu.generateXmuArg(settings, skipPathChecks)
 
 		if settings.settings['gdb_enabled']:
 			cmd.append('-gdb')
