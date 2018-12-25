@@ -416,6 +416,9 @@ def main():
 	palette.setColor(QtGui.QPalette.BrightText, QtCore.Qt.red)
 	palette.setColor(QtGui.QPalette.Highlight, QtGui.QColor(45,197,45).lighter())
 	palette.setColor(QtGui.QPalette.HighlightedText, QtCore.Qt.black)
+	palette.setColor(QtGui.QPalette.Disabled, QtGui.QPalette.Text, QtCore.Qt.darkGray)
+	palette.setColor(QtGui.QPalette.Disabled, QtGui.QPalette.ButtonText, QtCore.Qt.darkGray)
+	palette.setColor(QtGui.QPalette.Disabled, QtGui.QPalette.WindowText, QtCore.Qt.darkGray)
 	app.setPalette(palette)
 
 	widget = MainWindow()
