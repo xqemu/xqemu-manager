@@ -387,50 +387,15 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_17">
           <item>
-           <layout class="QGridLayout" name="gridLayout_9">
-            <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_5">
+            <item>
              <widget class="QLabel" name="label_14">
               <property name="text">
                <string>Controller:</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_10">
-              <item>
-               <widget class="QLineEdit" name="xmu2APath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="setXmu2A">
-                <property name="text">
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_12">
-              <item>
-               <widget class="QLineEdit" name="xmu2BPath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="setXmu2B">
-                <property name="text">
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_19">
-              <property name="text">
-               <string>Memory Unit A:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
+            <item>
              <widget class="QComboBox" name="controller2">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -470,14 +435,55 @@
               </item>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_22">
-              <property name="text">
-               <string>Memory Unit B:</string>
-              </property>
-             </widget>
-            </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="controller2Additional">
+            <layout class="QVBoxLayout" name="_2">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_10">
+               <item>
+                <widget class="QLabel" name="xmuLabel2A">
+                 <property name="text">
+                  <string>Memory Unit A:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="xmu2APath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="setXmu2A">
+                 <property name="text">
+                  <string>Choose...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_12">
+               <item>
+                <widget class="QLabel" name="xmuLabel2B">
+                 <property name="text">
+                  <string>Memory Unit B:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="xmu2BPath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="setXmu2B">
+                 <property name="text">
+                  <string>Choose...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -489,15 +495,15 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_18">
           <item>
-           <layout class="QGridLayout" name="gridLayout_10">
-            <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_7">
+            <item>
              <widget class="QLabel" name="label_15">
               <property name="text">
                <string>Controller:</string>
               </property>
              </widget>
             </item>
-            <item row="0" column="1">
+            <item>
              <widget class="QComboBox" name="controller3">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -537,49 +543,55 @@
               </item>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_20">
-              <property name="text">
-               <string>Memory Unit A:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_23">
-              <property name="text">
-               <string>Memory Unit B:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_13">
-              <item>
-               <widget class="QLineEdit" name="xmu3APath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="setXmu3A">
-                <property name="text">
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_14">
-              <item>
-               <widget class="QLineEdit" name="xmu3BPath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="setXmu3B">
-                <property name="text">
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="controller3Additional">
+            <layout class="QVBoxLayout" name="_4">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_13">
+               <item>
+                <widget class="QLabel" name="xmuLabel3A">
+                 <property name="text">
+                  <string>Memory Unit A:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="xmu3APath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="setXmu3A">
+                 <property name="text">
+                  <string>Choose...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_14">
+               <item>
+                <widget class="QLabel" name="xmuLabel3B">
+                 <property name="text">
+                  <string>Memory Unit B:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="xmu3BPath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="setXmu3B">
+                 <property name="text">
+                  <string>Choose...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -591,8 +603,15 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_19">
           <item>
-           <layout class="QGridLayout" name="gridLayout_11">
-            <item row="0" column="1">
+           <layout class="QHBoxLayout" name="horizontalLayout_8">
+            <item>
+             <widget class="QLabel" name="label_16">
+              <property name="text">
+               <string>Controller:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
              <widget class="QComboBox" name="controller4">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -632,56 +651,55 @@
               </item>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_21">
-              <property name="text">
-               <string>Memory Unit A:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="0">
-             <widget class="QLabel" name="label_16">
-              <property name="text">
-               <string>Controller:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_24">
-              <property name="text">
-               <string>Memory Unit B:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_15">
-              <item>
-               <widget class="QLineEdit" name="xmu4APath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="setXmu4A">
-                <property name="text">
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_16">
-              <item>
-               <widget class="QLineEdit" name="xmu4BPath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="setXmu4B">
-                <property name="text">
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="controller4Additional">
+            <layout class="QVBoxLayout" name="_3">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_15">
+               <item>
+                <widget class="QLabel" name="xmuLabel4A">
+                 <property name="text">
+                  <string>Memory Unit A:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="xmu4APath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="setXmu4A">
+                 <property name="text">
+                  <string>Choose...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_16">
+               <item>
+                <widget class="QLabel" name="xmuLabel4B">
+                 <property name="text">
+                  <string>Memory Unit B:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="xmu4BPath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="setXmu4B">
+                 <property name="text">
+                  <string>Choose...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>
@@ -693,22 +711,15 @@
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_16">
           <item>
-           <layout class="QGridLayout" name="gridLayout_3">
-            <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <item>
              <widget class="QLabel" name="label_13">
               <property name="text">
                <string>Controller:</string>
               </property>
              </widget>
             </item>
-            <item row="1" column="0">
-             <widget class="QLabel" name="label_17">
-              <property name="text">
-               <string>Memory Unit A:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="0" column="1">
+            <item>
              <widget class="QComboBox" name="controller1">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -748,48 +759,61 @@
               </item>
              </widget>
             </item>
-            <item row="2" column="0">
-             <widget class="QLabel" name="label_18">
-              <property name="text">
-               <string>Memory Unit B:</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_9">
-              <item>
-               <widget class="QLineEdit" name="xmu1APath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="setXmu1A">
-                <property name="sizePolicy">
-                 <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                  <horstretch>0</horstretch>
-                  <verstretch>0</verstretch>
-                 </sizepolicy>
-                </property>
-                <property name="text">
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
-            <item row="2" column="1">
-             <layout class="QHBoxLayout" name="horizontalLayout_11">
-              <item>
-               <widget class="QLineEdit" name="xmu1BPath"/>
-              </item>
-              <item>
-               <widget class="QPushButton" name="setXmu1B">
-                <property name="text">
-                 <string>Choose...</string>
-                </property>
-               </widget>
-              </item>
-             </layout>
-            </item>
            </layout>
+          </item>
+          <item>
+           <widget class="QGroupBox" name="controller1Additional">
+            <layout class="QVBoxLayout" name="_5">
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_9">
+               <item>
+                <widget class="QLabel" name="xmuLabel1A">
+                 <property name="text">
+                  <string>Memory Unit A:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="xmu1APath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="setXmu1A">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Choose...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_11">
+               <item>
+                <widget class="QLabel" name="xmuLabel1B">
+                 <property name="text">
+                  <string>Memory Unit B:</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <widget class="QLineEdit" name="xmu1BPath"/>
+               </item>
+               <item>
+                <widget class="QPushButton" name="setXmu1B">
+                 <property name="text">
+                  <string>Choose...</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </item>
+            </layout>
+           </widget>
           </item>
          </layout>
         </widget>

@@ -80,6 +80,14 @@ class SettingsWindow(QDialog, settings_class):
 		def getDropdownAttr(widget, var): widget.setCurrentText(self.settings.settings[var])
 		def updateLaunchCmd(): self.invocationPreview.setPlainText(Xqemu.launchCmdToString(Xqemu.generateLaunchCmd(self.settings, True)))
 
+		def updateControllerUi():
+			# Update all four controllers
+			for i in [1, 2, 3, 4]:
+				controller = getattr(self, 'controller' + str(i))
+				is_connected = (controller.currentIndex() != 0)
+				group = getattr(self, 'controller' + str(i) + 'Additional')
+				group.setEnabled(is_connected)
+
 		def bindTextWidget(widget, var):
 			getTextAttr(widget, var)
 			widget.textChanged.connect(lambda:setTextAttr(widget, var))
@@ -137,7 +145,16 @@ class SettingsWindow(QDialog, settings_class):
 		bindCheckWidget(self.waitForGdb, 'gdb_wait')
 		bindTextWidget(self.gdbPort, 'gdb_port')
 		bindTextWidget(self.additionalArgs, 'extra_args')
+		
+		# Controller UI has additional logic
+		self.controller1.currentIndexChanged.connect(updateControllerUi)
+		self.controller2.currentIndexChanged.connect(updateControllerUi)
+		self.controller3.currentIndexChanged.connect(updateControllerUi)
+		self.controller4.currentIndexChanged.connect(updateControllerUi)
+		
+		# Prepare initial UI state
 		updateLaunchCmd()
+		updateControllerUi()
 
 	def setSaveFileName(self, obj):
 		options = QFileDialog.Options()
