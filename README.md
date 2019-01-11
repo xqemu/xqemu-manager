@@ -2,7 +2,7 @@
 
 | Windows Build Status |
 | -------------------- |
-| [![Build status](https://ci.appveyor.com/api/projects/status/q91apisx6eww0f0v?svg=true)](https://ci.appveyor.com/project/mborgerson/xqemu-manager) |
+| [![Build status](https://ci.appveyor.com/api/projects/status/9hb88yawy54b0086?svg=true)](https://ci.appveyor.com/project/xqemu-bot/xqemu-manager) |
 
 This is a helper GUI prototype (hastily hacked together) to launch and control
 [XQEMU](http://github.com/xqemu/xqemu), currently in very early stages. Pull
