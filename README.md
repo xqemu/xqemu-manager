@@ -1,4 +1,4 @@
-# xqemu Manager Prototype
+# XQEMU-Manager Prototype
 
 | Windows Build Status |
 | -------------------- |

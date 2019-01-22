@@ -958,7 +958,7 @@
           </font>
          </property>
          <property name="text">
-          <string>xqemu manager</string>
+          <string>XQEMU-Manager</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignCenter</set>
