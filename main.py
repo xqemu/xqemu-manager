@@ -171,16 +171,6 @@ class Xqemu(object):
 		self._qmp = None
 
 	@staticmethod
-	def generateAcceleratorArg(use):
-		if not use:
-			return ''
-
-		# pick accelerator based on OS (default to none if OS is unknown)
-		return {'Darwin': ',-accel=haxm',
-				'Linux': ',accel=kvm,kernel_irqchip=off',
-				'Windows': ',accel=haxm'}.get(platform.system(), '')
-
-	@staticmethod
 	def generateControllerArg(settings):
 		def genArg(settings, name, port):
 			arg = {'Not connected': '',
@@ -246,8 +236,7 @@ class Xqemu(object):
 		short_anim_arg = ',short_animation' if settings.settings['short_anim'] else ''
 		hdd_lock_arg = ',locked' if settings.settings['hdd_locked'] else ''
 		sys_memory = settings.settings['sys_memory'].split(' ')[0]+'M'
-		accelerator_arg = Xqemu.generateAcceleratorArg(settings.settings['use_accelerator'])
-
+		accel_arg = ',accel=kvm:hax:whpx,kernel_irqchip=off' if settings.settings['use_accelerator'] else ''
 		dvd_path_arg = ''
 		if settings.settings['dvd_present']:
 			check_path(settings.settings['dvd_path'])
@@ -258,7 +247,7 @@ class Xqemu(object):
 		# Build qemu launch cmd
 		cmd = [xqemu_path,
 		       '-cpu','pentium3',
-		       '-machine','xbox%(accelerator_arg)s,bootrom=%(mcpx_path_arg)s%(short_anim_arg)s' % locals(),
+		       '-machine','xbox%(accel_arg)s,bootrom=%(mcpx_path_arg)s%(short_anim_arg)s' % locals(),
 		       '-m', '%(sys_memory)s' % locals(),
 		       '-bios', '%(flash_path_arg)s' % locals(),
 		       '-drive','file=%(hdd_path_arg)s,index=0,media=disk%(hdd_lock_arg)s' % locals(),
