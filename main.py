@@ -9,7 +9,6 @@ from qmp import QEMUMonitorProtocol
 import sys
 import os, os.path
 import json
-import subprocess
 import time
 import platform
 
@@ -167,7 +166,7 @@ class SettingsWindow(QDialog, settings_class):
 
 class Xqemu(object):
 	def __init__(self):
-		self._p = None
+		self._p = QtCore.QProcess()
 		self._qmp = None
 
 	@staticmethod
@@ -282,10 +281,11 @@ class Xqemu(object):
 
 	def start(self, settings):
 		cmd = self.generateLaunchCmd(settings)
+		cmd_string = self.launchCmdToString(cmd)
 
-		print('Running: %s' % self.launchCmdToString(cmd))
+		print('Running: %s' % cmd_string)
 
-		self._p = subprocess.Popen(cmd)
+		self._p.start(cmd_string)
 		i = 0
 		while True:
 			print('Trying to connect %d' % i)
@@ -294,6 +294,10 @@ class Xqemu(object):
 				self._qmp = QEMUMonitorProtocol(('localhost', 4444))
 				self._qmp.connect()
 			except Exception as e:
+				# If XQEMU quits, we abort the loop
+				if self._p.waitForFinished(1):
+					return
+
 				if i > 4:
 					raise
 				else:
@@ -302,9 +306,8 @@ class Xqemu(object):
 			break
 
 	def stop(self):
-		if self._p:
+		if self.isRunning:
 			self._p.terminate()
-			self._p = None
 
 	def run_cmd(self, cmd):
 		if type(cmd) is str:
@@ -341,7 +344,7 @@ class Xqemu(object):
 
 	@property
 	def isRunning(self):
-		return self._p is not None # FIXME: Check subproc state
+		return self._p is not None and self._p.state() == QtCore.QProcess.Running
 
 class MainWindow(QMainWindow, mainwindow_class):
 	def __init__(self, *args):
@@ -361,19 +364,46 @@ class MainWindow(QMainWindow, mainwindow_class):
 		self.restartButton.clicked.connect(self.onRestartButtonClicked)
 		self.actionExit.triggered.connect(self.onExitClicked)
 		self.actionSettings.triggered.connect(self.onSettingsClicked)
+		self.inst._p.readyReadStandardOutput.connect(self.onReadyReadStandardOutput)
+		self.inst._p.readyReadStandardError.connect(self.onReadyReadStandardError)
+		self.inst._p.stateChanged.connect(self.onXqemuStateChanged)
+
+	def onReadyReadStandardOutput(self):
+		text = self.inst._p.readAllStandardOutput().data().decode()
+		self.log.moveCursor(QtGui.QTextCursor.End)
+		self.log.insertPlainText(text)
+		self.log.moveCursor(QtGui.QTextCursor.End)
+
+	def onReadyReadStandardError(self):
+		text = self.inst._p.readAllStandardError().data().decode()
+		self.log.moveCursor(QtGui.QTextCursor.End)
+		self.log.insertPlainText(text)
+		self.log.moveCursor(QtGui.QTextCursor.End)
+
+	def onXqemuStateChanged(self):
+		if self.inst.isRunning:
+			self.runButton.setText('Stop')
+		else:
+			self.runButton.setText('Start')
+			if self.inst._p.exitCode() != 0:
+				QMessageBox.critical(self, 'XQEMU quit prematurely!', 'XQEMU quit prematurely.\n\n'
+					'This may be a known issue with this specific game, a problem in XQEMU, or an error in your settings.\n'
+					'Please check your settings for correctness and see the log area for details.\n'
+					'If you need help resolving this problem, make sure to include this log in your error report, '
+					'along with as many details about how and what you were doing when the error happened.')
+		self.pauseButton.setText('Pause')
 
 	def onRunButtonClicked(self):
 		if not self.inst.isRunning:
 			# No active instance
 			try:
+				self.log.clear()
 				self.inst.start(self.settings)
-				self.runButton.setText('Stop')
 			except Exception as e:
 				QMessageBox.critical(self, 'Error!', str(e))
 		else:
 			# Instance exists
 			self.inst.stop()
-			self.runButton.setText('Start')
 
 	def onPauseButtonClicked(self):
 		if not self.inst.isRunning: return
