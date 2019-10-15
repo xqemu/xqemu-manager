@@ -355,6 +355,7 @@ class MainWindow(QMainWindow, mainwindow_class):
 		self.settings.load()
 		self.runButton.setText('Start')
 		self.pauseButton.setText('Pause')
+		self.pauseButton.setEnabled(False)
 		self.screenshotButton.setText('Screenshot')
 
 		# Connect signals
@@ -383,15 +384,17 @@ class MainWindow(QMainWindow, mainwindow_class):
 	def onXqemuStateChanged(self):
 		if self.inst.isRunning:
 			self.runButton.setText('Stop')
+			self.pauseButton.setEnabled(True)
 		else:
 			self.runButton.setText('Start')
+			self.pauseButton.setEnabled(False)
+			self.pauseButton.setText('Pause')
 			if self.inst._p.exitCode() != 0:
 				QMessageBox.critical(self, 'XQEMU quit prematurely!', 'XQEMU quit prematurely.\n\n'
 					'This may be a known issue with this specific game, a problem in XQEMU, or an error in your settings.\n'
 					'Please check your settings for correctness and see the log area for details.\n'
 					'If you need help resolving this problem, make sure to include this log in your error report, '
 					'along with as many details about how and what you were doing when the error happened.')
-		self.pauseButton.setText('Pause')
 
 	def onRunButtonClicked(self):
 		if not self.inst.isRunning:
