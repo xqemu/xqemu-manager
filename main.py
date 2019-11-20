@@ -178,7 +178,7 @@ class Xqemu(object):
 			 'Gamepad #1': 'usb-xbox-gamepad-sdl,index=1',
 			 'Gamepad #2': 'usb-xbox-gamepad-sdl,index=2',
 			 'Gamepad #3': 'usb-xbox-gamepad-sdl,index=3'}.get(settings.settings[name], '')
-			if arg is not '':
+			if arg != '':
 				return ['-device', 'usb-hub,port=' + str(port), '-device'] + [arg + ',port=' + str(port) + ".1"]
 			return []
 
@@ -199,7 +199,7 @@ class Xqemu(object):
 
 		def genArg(settings, name, port):
 			port_arr = ['controller_three', 'controller_four', 'controller_one', 'controller_two']
-			if settings.settings[name] is not '' and settings.settings[port_arr[int(port[:1]) - 1]] != 'Not connected':
+			if settings.settings[name] != '' and settings.settings[port_arr[int(port[:1]) - 1]] != 'Not connected':
 				check_path(settings.settings[name])
 				return ['-drive', 'if=none,id=' + name + ',file=' + escape_path(settings.settings[name]),
 						'-device', 'usb-storage,drive=' + name + ',port=' + port]
@@ -241,7 +241,7 @@ class Xqemu(object):
 			check_path(settings.settings['dvd_path'])
 			dvd_path_arg = ',file=' + escape_path(settings.settings['dvd_path'])
 
-		extra_args = [x for x in settings.settings['extra_args'].split(' ') if x is not '']
+		extra_args = [x for x in settings.settings['extra_args'].split(' ') if x != '']
 
 		# Build qemu launch cmd
 		cmd = [xqemu_path,
